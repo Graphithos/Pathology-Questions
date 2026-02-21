@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQs on Introduction to Pathology Quiz</title>
+    <style>
+        :root {
+            --bg-color: #f5f7fa;
+            --container-bg: white;
+            --text-color: #333;
+            --border-color: #ddd;
+            --primary-color: #3498db;
+            --header-color: #2c3e50;
+            --secondary-text: #7f8c8d;
+            --progress-bg: #ecf0f1;
+            --question-bg: #f8f9fa;
+            --option-bg: #fff;
+            --option-hover: #f1f8ff;
+            --option-selected: #d1ecf1;
+            --correct-bg: #d4edda;
+            --correct-border: #28a745;
+            --incorrect-bg: #f8d7da;
+            --incorrect-border: #dc3545;
+            --button-bg: #3498db;
+            --button-hover: #2980b9;
+            --button-disabled: #bdc3c7;
+            --restart-bg: #2ecc71;
+            --restart-hover: #27ae60;
+            --review-bg: #f39c12;
+            --review-hover: #e67e22;
+            --toggle-bg: #ecf0f1;
+            --toggle-slider: white;
+            --toggle-text: #7f8c8d;
+        }
+
+        .dark-mode {
+            --bg-color: #1a1a2e;
+            --container-bg: #16213e;
+            --text-color: #e6e6e6;
+            --border-color: #394867;
+            --primary-color: #4cc9f0;
+            --header-color: #e6e6e6;
+            --secondary-text: #a9a9a9;
+            --progress-bg: #394867;
+            --question-bg: #1f4068;
+            --option-bg: #16213e;
+            --option-hover: #1f4068;
+            --option-selected: #1f4068;
+            --correct-bg: #2d5a2d;
+            --correct-border: #4caf50;
+            --incorrect-bg: #5a2d2d;
+            --incorrect-border: #f44336;
+            --button-bg: #4cc9f0;
+            --button-hover: #3aa8d0;
+            --button-disabled: #5d6d7e;
+            --restart-bg: #2ecc71;
+            --restart-hover: #27ae60;
+            --review-bg: #f39c12;
+            --review-hover: #e67e22;
+            --toggle-bg: #394867;
+            --toggle-slider: #4cc9f0;
+            --toggle-text: #e6e6e6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--container-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+            position: relative;
+        }
+        h1 {
+            color: var(--header-color);
+            margin-bottom: 5px;
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+        .author {
+            color: var(--secondary-text);
+            font-style: italic;
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+        .description {
+            color: var(--secondary-text);
+            margin-bottom: 20px;
+            transition: color 0.3s;
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 35px;
+            right: 0;
+            display: flex;
+            align-items: center;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 120px;
+            height: 34px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--toggle-bg);
+            transition: .4s;
+            border-radius: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--toggle-text);
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 60px;
+            left: 4px;
+            bottom: 4px;
+            background-color: var(--toggle-slider);
+            transition: .4s;
+            border-radius: 34px;
+            z-index: 1;
+        }
+        .slider-text {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .light-text, .dark-text {
+            transition: opacity 0.3s;
+        }
+        .dark-mode .light-text {
+            opacity: 0.5;
+        }
+        .light-text {
+            opacity: 0.5;
+        }
+        .dark-mode .dark-text {
+            opacity: 1;
+        }
+        .dark-text {
+            opacity: 0.5;
+        }
+        input:checked + .slider:before {
+            transform: translateX(52px);
+        }
+        .progress-container {
+            background: var(--progress-bg);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            position: relative;
+            height: 10px;
+            transition: background-color 0.3s;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--header-color);
+            transition: color 0.3s;
+        }
+        .question {
+            background: var(--question-bg);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: background-color 0.3s;
+        }
+        .question-number {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+        .question-text {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .options {
+            display: grid;
+            grid-gap: 10px;
+        }
+        .option {
+            padding: 12px 15px;
+            background: var(--option-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option:hover {
+            background: var(--option-hover);
+            border-color: var(--primary-color);
+        }
+        .option.selected {
+            background: var(--option-selected);
+            border-color: var(--primary-color);
+        }
+        .option.correct {
+            background: var(--correct-bg);
+            border-color: var(--correct-border);
+        }
+        .option.incorrect {
+            background: var(--incorrect-bg);
+            border-color: var(--incorrect-border);
+        }
+        .feedback {
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            display: none;
+        }
+        .feedback.correct {
+            background: var(--correct-bg);
+            color: var(--text-color);
+            border: 1px solid var(--correct-border);
+            display: block;
+        }
+        .feedback.incorrect {
+            background: var(--incorrect-bg);
+            color: var(--text-color);
+            border: 1px solid var(--incorrect-border);
+            display: block;
+        }
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        button {
+            padding: 10px 20px;
+            background: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: var(--button-hover);
+        }
+        button:disabled {
+            background: var(--button-disabled);
+            cursor: not-allowed;
+        }
+        .results {
+            text-align: center;
+            padding: 30px;
+            display: none;
+        }
+        .score {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--header-color);
+        }
+        .score-value {
+            font-size: 48px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        .restart-btn {
+            margin-top: 20px;
+            background: var(--restart-bg);
+        }
+        .restart-btn:hover {
+            background: var(--restart-hover);
+        }
+        .review-btn {
+            margin-top: 20px;
+            background: var(--review-bg);
+        }
+        .review-btn:hover {
+            background: var(--review-hover);
+        }
+        .review-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: var(--question-bg);
+            border-radius: 8px;
+            display: none;
+        }
+        .review-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--header-color);
+            text-align: center;
+        }
+        .review-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-left: 4px solid var(--incorrect-border);
+            background: var(--container-bg);
+            border-radius: 4px;
+        }
+        .review-question-number {
+            font-weight: bold;
+            color: var(--incorrect-border);
+            margin-bottom: 8px;
+        }
+        .review-question-text {
+            margin-bottom: 10px;
+        }
+        .review-answer {
+            margin-top: 8px;
+            font-weight: bold;
+        }
+        .review-correct {
+            color: var(--correct-border);
+        }
+        .review-explanation {
+            margin-top: 5px;
+            font-style: italic;
+            color: var(--secondary-text);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>MCQs on Introduction to Pathology Quiz</h1>
+            <p class="author">Dr. Samy Salem</p>
+            <p class="description">Test your knowledge of Pathology: branches, terminology, disease classification, and biopsy techniques</p>
+            <div class="theme-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <span class="slider">
+                        <div class="slider-text">
+                            <span class="light-text">Light</span>
+                            <span class="dark-text">Dark</span>
+                        </div>
+                    </span>
+                </label>
+            </div>
+        </header>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="stats">
+            <div>Question: <span id="current-question">1</span>/<span id="total-questions">40</span></div>
+            <div>Score: <span id="score">0</span>/<span id="total-score">40</span></div>
+        </div>
+
+        <div id="quiz-container">
+            <!-- Questions will be inserted here by JavaScript -->
+        </div>
+
+        <div class="navigation">
+            <button id="prev-btn" disabled>Previous</button>
+            <button id="next-btn">Next</button>
+        </div>
+
+        <div id="results" class="results">
+            <div class="score">Your Score: <span class="score-value" id="final-score">0</span>/40</div>
+            <p id="performance-message"></p>
+            <button class="restart-btn" id="restart-btn">Restart Quiz</button>
+            <button class="review-btn" id="review-btn">Review Incorrect Answers</button>
+        </div>
+
+        <div id="review-section" class="review-section">
+            <h2 class="review-title">Questions Answered Incorrectly</h2>
+            <div id="incorrect-questions-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data from Introduction to Pathology PDF (extracted from 1. Introduction to Pathology (MCQs).pdf)
+        const originalQuizData = [
+            {
+                question: "The study of pathology is divided into two main branches:",
+                options: [
+                    "Anatomical and Clinical",
+                    "Medical and Surgical",
+                    "General and Systemic",
+                    "Molecular and Cellular"
+                ],
+                answer: 2,
+                explanation: "Page 3"
+            },
+            {
+                question: "General pathology covers all of the following EXCEPT:",
+                options: [
+                    "Inflammation",
+                    "Cell injury",
+                    "Diseases of the cardiovascular system",
+                    "Neoplasia"
+                ],
+                answer: 2,
+                explanation: "Page 3"
+            },
+            {
+                question: "Systemic pathology deals with:",
+                options: [
+                    "Basic mechanisms of disease like inflammation.",
+                    "Diseases as they occur in specific organ systems.",
+                    "The study of molecules in a disease state.",
+                    "Laboratory analysis of bodily fluids."
+                ],
+                answer: 1,
+                explanation: "Page 3"
+            },
+            {
+                question: "The diagnosis of disease based on the gross, microscopic, and immunologic examination of organs and tissues is the domain of:",
+                options: [
+                    "Clinical pathology",
+                    "Molecular pathology",
+                    "Systemic pathology",
+                    "Anatomical pathology"
+                ],
+                answer: 3,
+                explanation: "Page 4"
+            },
+            {
+                question: "Clinical pathology involves the laboratory analysis of:",
+                options: [
+                    "Organs and tissues",
+                    "DNA, RNA, and protein",
+                    "Bodily fluids",
+                    "Entire corpses"
+                ],
+                answer: 2,
+                explanation: "Page 4"
+            },
+            {
+                question: "The study of molecules such as DNA and RNA in a disease state is known as:",
+                options: [
+                    "Molecular pathology",
+                    "Anatomical pathology",
+                    "General pathology",
+                    "Immunohistochemistry"
+                ],
+                answer: 0,
+                explanation: "Page 4"
+            },
+            {
+                question: "The term for the cause of a disease is:",
+                options: [
+                    "Pathogenesis",
+                    "Morphology",
+                    "Etiology",
+                    "Prognosis"
+                ],
+                answer: 2,
+                explanation: "Page 5"
+            },
+            {
+                question: "The mechanisms of development of a disease are referred to as its:",
+                options: [
+                    "Pathogenesis",
+                    "Etiology",
+                    "Morphology",
+                    "Diagnosis"
+                ],
+                answer: 0,
+                explanation: "Page 5"
+            },
+            {
+                question: "The structural changes in tissues and organs caused by disease are known as:",
+                options: [
+                    "Pathogenesis",
+                    "Etiology",
+                    "Prognosis",
+                    "Morphology"
+                ],
+                answer: 3,
+                explanation: "Page 5"
+            },
+            {
+                question: "Diseases caused by the invasion and colonization of pathogenic microorganisms are classified as:",
+                options: [
+                    "Genetic diseases",
+                    "Immunologic diseases",
+                    "Infectious diseases",
+                    "Neoplastic diseases"
+                ],
+                answer: 2,
+                explanation: "Page 7"
+            },
+            {
+                question: "The uncontrolled growth of abnormal cells, which may be benign or malignant, defines:",
+                options: [
+                    "Immunologic disease",
+                    "Neoplasm",
+                    "Genetic disease",
+                    "Iatrogenic disease"
+                ],
+                answer: 1,
+                explanation: "Page 7"
+            },
+            {
+                question: "An over-reaction by the immune system is a type of:",
+                options: [
+                    "Auto-immune disease",
+                    "Hypersensitivity",
+                    "Immune deficiency",
+                    "Infectious disease"
+                ],
+                answer: 1,
+                explanation: "Page 8"
+            },
+            {
+                question: "Destruction of one's own tissues by antibodies produced by one's own immune system is characteristic of:",
+                options: [
+                    "Hypersensitivity",
+                    "Immune deficiency disease",
+                    "Auto-immune disease",
+                    "Iatrogenic disease"
+                ],
+                answer: 2,
+                explanation: "Page 8"
+            },
+            {
+                question: "Rheumatoid arthritis and Systemic Lupus Erythematosus (SLE) are examples of:",
+                options: [
+                    "Infectious diseases",
+                    "Neoplastic diseases",
+                    "Auto-immune diseases",
+                    "Contagious diseases"
+                ],
+                answer: 2,
+                explanation: "Page 8"
+            },
+            {
+                question: "If the cause of a disease, such as sarcoidosis, has never been discovered, it is termed:",
+                options: [
+                    "Iatrogenic",
+                    "Genetic",
+                    "Infectious",
+                    "Idiopathic"
+                ],
+                answer: 3,
+                explanation: "Page 9"
+            },
+            {
+                question: "A disease that arises as a result of a prescribed treatment, such as anemia from chemotherapy, is called:",
+                options: [
+                    "Idiopathic",
+                    "Nosocomial",
+                    "Iatrogenic",
+                    "Contagious"
+                ],
+                answer: 2,
+                explanation: "Page 9"
+            },
+            {
+                question: "A biopsy is defined as:",
+                options: [
+                    "A radiological investigation.",
+                    "A sample of tissue or cells taken from the body for examination.",
+                    "The analysis of bodily fluids.",
+                    "An assessment of the expected outcome of a disease."
+                ],
+                answer: 1,
+                explanation: "Page 17"
+            },
+            {
+                question: "Which of the following is an indication for performing a biopsy?",
+                options: [
+                    "To determine the patient's blood type.",
+                    "To evaluate a tumor for benign vs. malignant status.",
+                    "To measure body temperature.",
+                    "To assess heart rate."
+                ],
+                answer: 1,
+                explanation: "Page 17"
+            },
+            {
+                question: "A biopsy where a whole lump is surgically removed is called:",
+                options: [
+                    "Incisional biopsy",
+                    "Core biopsy",
+                    "Endoscopic biopsy",
+                    "Excisional biopsy"
+                ],
+                answer: 3,
+                explanation: "Page 18, 21"
+            },
+            {
+                question: "A biopsy where only a portion of a lump is removed is most commonly used for tumors of the:",
+                options: [
+                    "GIT lining",
+                    "Bone marrow",
+                    "Soft tissues like muscle and fat",
+                    "Skin surface"
+                ],
+                answer: 2,
+                explanation: "Page 21"
+            },
+            {
+                question: "In Fine Needle Aspiration Cytology (FNAC), a thin needle is used to:",
+                options: [
+                    "Remove a small cylinder of tissue.",
+                    "Aspirate cells for staining and examination.",
+                    "Visualize the lining of an organ.",
+                    "Perform a thorough examination of a corpse."
+                ],
+                answer: 1,
+                explanation: "Page 23"
+            },
+            {
+                question: "An endoscopic biopsy allows for:",
+                options: [
+                    "Direct visualization of the lining of an organ and pinching off tissue.",
+                    "Removal of a whole organ.",
+                    "Aspiration of fluid from a cyst.",
+                    "Examination of the entire body after death."
+                ],
+                answer: 0,
+                explanation: "Page 20"
+            },
+            {
+                question: "A thorough examination of a corpse by dissection to determine the cause of death is a(n):",
+                options: [
+                    "Excisional biopsy",
+                    "Incisional biopsy",
+                    "Autopsy",
+                    "Endoscopy"
+                ],
+                answer: 2,
+                explanation: "Page 22"
+            },
+            {
+                question: "In a routine Hematoxylin and Eosin (H&E) stain, what color do cell nuclei typically appear?",
+                options: [
+                    "Pink to red",
+                    "Blue to purple",
+                    "Green",
+                    "Yellow"
+                ],
+                answer: 1,
+                explanation: "Page 25"
+            },
+            {
+                question: "In an H&E stain, eosin stains which part of the cell pink to red?",
+                options: [
+                    "Nuclei",
+                    "Cytoplasm",
+                    "DNA",
+                    "Calcium"
+                ],
+                answer: 1,
+                explanation: "Page 25"
+            },
+            {
+                question: "Congo red is a histochemical stain used to detect:",
+                options: [
+                    "Amyloid",
+                    "Iron",
+                    "Collagen",
+                    "Bacteria"
+                ],
+                answer: 0,
+                explanation: "Page 26"
+            },
+            {
+                question: "Prussian blue stain is used to detect which substance in tissues?",
+                options: [
+                    "Amyloid",
+                    "Glycogen",
+                    "Iron",
+                    "Fat"
+                ],
+                answer: 2,
+                explanation: "Page 26"
+            },
+            {
+                question: "Immunohistochemistry (IHC) is a technique that uses antibodies to detect:",
+                options: [
+                    "Basic tissue structures like nuclei.",
+                    "Specific antigens, often for tumor diagnosis.",
+                    "The presence of microorganisms.",
+                    "The chemical composition of bodily fluids."
+                ],
+                answer: 1,
+                explanation: "Page 28"
+            },
+            {
+                question: "Electron microscopy (EM) is particularly useful for examining:",
+                options: [
+                    "The overall architecture of a tumor.",
+                    "The color of a stained tissue.",
+                    "Cellular organelles, such as in renal diseases.",
+                    "The presence of bacteria on a slide."
+                ],
+                answer: 2,
+                explanation: "Page 30"
+            },
+            {
+                question: "The clinician's estimate of the severity and possible result of a disease is its:",
+                options: [
+                    "Diagnosis",
+                    "Etiology",
+                    "Pathogenesis",
+                    "Prognosis"
+                ],
+                answer: 3,
+                explanation: "Page 32"
+            },
+            {
+                question: "A disease with a slow, gradual onset and long duration, such as diabetes mellitus, is classified as:",
+                options: [
+                    "Acute",
+                    "Chronic",
+                    "Sub-clinical",
+                    "Self-limiting"
+                ],
+                answer: 1,
+                explanation: "Page 33"
+            },
+            {
+                question: "Cholera, which is an acute and often fatal disease, can be described as:",
+                options: [
+                    "Chronic",
+                    "Self-limiting",
+                    "Fulminating",
+                    "Idiopathic"
+                ],
+                answer: 2,
+                explanation: "Page 33"
+            },
+            {
+                question: "A disease that is transmitted by direct, intimate skin contact, like scabies, is termed:",
+                options: [
+                    "Contagious",
+                    "Venereal",
+                    "Infectious",
+                    "Communicable"
+                ],
+                answer: 0,
+                explanation: "Page 33"
+            },
+            {
+                question: "A disease that affects many people in a given region at the same time is described as:",
+                options: [
+                    "Endemic",
+                    "Epidemic",
+                    "Systemic",
+                    "Localized"
+                ],
+                answer: 1,
+                explanation: "Page 34"
+            },
+            {
+                question: "The term 'neoplasia' means:",
+                options: [
+                    "New growth forming an abnormal mass.",
+                    "The study of tumors.",
+                    "The spread of a tumor to distant sites.",
+                    "The death of cells."
+                ],
+                answer: 0,
+                explanation: "Page 36"
+            },
+            {
+                question: "The study of tumors and neoplasms is called:",
+                options: [
+                    "Pathology",
+                    "Oncology",
+                    "Histology",
+                    "Cytology"
+                ],
+                answer: 1,
+                explanation: "Page 36"
+            },
+            {
+                question: "Which of the following is a characteristic of a benign tumor?",
+                options: [
+                    "Rapid rate of growth",
+                    "Invasive mode of growth",
+                    "Well-defined, often capsulated margins",
+                    "High potential to spread (metastasize)"
+                ],
+                answer: 2,
+                explanation: "Page 39"
+            },
+            {
+                question: "A malignant tumor of glandular epithelial tissue is called a(n):",
+                options: [
+                    "Adenoma",
+                    "Sarcoma",
+                    "Lipoma",
+                    "Adenocarcinoma"
+                ],
+                answer: 3,
+                explanation: "Page 41"
+            },
+            {
+                question: "A benign tumor of fat cells is a:",
+                options: [
+                    "Liposarcoma",
+                    "Lipoma",
+                    "Chondroma",
+                    "Leiomyoma"
+                ],
+                answer: 1,
+                explanation: "Page 44"
+            },
+            {
+                question: "Metastasis is defined as:",
+                options: [
+                    "The process by which normal cells become cancer cells.",
+                    "Uncontrolled cell growth at the primary site.",
+                    "Tumor implants discontinuous with the primary tumor.",
+                    "The death of tumor cells."
+                ],
+                answer: 2,
+                explanation: "Page 52"
+            }
+        ];
+
+        // Function to shuffle an array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Function to create a randomized version of the quiz data
+        function createRandomizedQuizData() {
+            const randomizedData = [];
+            
+            originalQuizData.forEach(question => {
+                // Create a copy of the original question
+                const randomizedQuestion = {
+                    question: question.question,
+                    options: [...question.options], // Copy options array
+                    originalAnswer: question.answer, // Store original answer index
+                    explanation: question.explanation
+                };
+                
+                // Create an array of indices [0, 1, 2, 3]
+                const indices = [0, 1, 2, 3];
+                
+                // Shuffle the indices
+                shuffleArray(indices);
+                
+                // Create a new options array with shuffled order
+                const shuffledOptions = indices.map(index => question.options[index]);
+                
+                // Find the new position of the correct answer
+                const newAnswerIndex = indices.indexOf(question.answer);
+                
+                // Update the question with shuffled options and new answer
+                randomizedQuestion.options = shuffledOptions;
+                randomizedQuestion.answer = newAnswerIndex;
+                
+                randomizedData.push(randomizedQuestion);
+            });
+            
+            return randomizedData;
+        }
+
+        // Create randomized quiz data
+        let quizData = createRandomizedQuizData();
+
+        // Quiz state variables
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = new Array(quizData.length).fill(null);
+        let incorrectQuestions = [];
+
+        // DOM elements
+        const quizContainer = document.getElementById('quiz-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const currentQuestionEl = document.getElementById('current-question');
+        const totalQuestionsEl = document.getElementById('total-questions');
+        const scoreEl = document.getElementById('score');
+        const totalScoreEl = document.getElementById('total-score');
+        const resultsContainer = document.getElementById('results');
+        const finalScoreEl = document.getElementById('final-score');
+        const performanceMessageEl = document.getElementById('performance-message');
+        const restartBtn = document.getElementById('restart-btn');
+        const reviewBtn = document.getElementById('review-btn');
+        const reviewSection = document.getElementById('review-section');
+        const incorrectQuestionsList = document.getElementById('incorrect-questions-list');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const lightText = document.querySelector('.light-text');
+        const darkText = document.querySelector('.dark-text');
+
+        // Initialize quiz
+        function initQuiz() {
+            totalQuestionsEl.textContent = quizData.length;
+            totalScoreEl.textContent = quizData.length;
+            showQuestion();
+            updateProgressBar();
+            
+            // Initialize dark mode based on system preference
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.body.classList.add('dark-mode');
+                darkModeToggle.checked = true;
+                updateToggleText(true);
+            } else {
+                updateToggleText(false);
+            }
+            
+            // Event listeners
+            prevBtn.addEventListener('click', showPreviousQuestion);
+            nextBtn.addEventListener('click', showNextQuestion);
+            restartBtn.addEventListener('click', restartQuiz);
+            reviewBtn.addEventListener('click', showIncorrectQuestions);
+            darkModeToggle.addEventListener('change', toggleDarkMode);
+        }
+
+        // Toggle dark mode
+        function toggleDarkMode() {
+            const isDarkMode = darkModeToggle.checked;
+            document.body.classList.toggle('dark-mode', isDarkMode);
+            updateToggleText(isDarkMode);
+        }
+
+        // Update toggle text opacity
+        function updateToggleText(isDarkMode) {
+            if (isDarkMode) {
+                lightText.style.opacity = '0.5';
+                darkText.style.opacity = '1';
+            } else {
+                lightText.style.opacity = '1';
+                darkText.style.opacity = '0.5';
+            }
+        }
+
+        // Show current question
+        function showQuestion() {
+            currentQuestionEl.textContent = currentQuestion + 1;
+            scoreEl.textContent = score;
+            
+            const question = quizData[currentQuestion];
+            let optionsHTML = '';
+            
+            question.options.forEach((option, index) => {
+                let optionClass = 'option';
+                if (userAnswers[currentQuestion] === index) {
+                    optionClass += ' selected';
+                    if (index === question.answer) {
+                        optionClass += ' correct';
+                    } else {
+                        optionClass += ' incorrect';
+                    }
+                }
+                
+                optionsHTML += `
+                    <div class="${optionClass}" data-index="${index}">
+                        ${String.fromCharCode(65 + index)}) ${option}
+                    </div>
+                `;
+            });
+            
+            let feedbackHTML = '';
+            if (userAnswers[currentQuestion] !== null) {
+                const isCorrect = userAnswers[currentQuestion] === question.answer;
+                const correctLetter = String.fromCharCode(65 + question.answer);
+                const correctAnswerText = question.options[question.answer];
+                
+                feedbackHTML = `
+                    <div class="feedback ${isCorrect ? 'correct' : 'incorrect'}">
+                        ${isCorrect ? '✓ Correct!' : '✗ Incorrect!'} 
+                        ${!isCorrect ? `Correct answer: ${correctLetter}) ${correctAnswerText}` : ''}
+                        <br><br>Explanation: ${question.explanation}
+                    </div>
+                `;
+            }
+            
+            quizContainer.innerHTML = `
+                <div class="question">
+                    <div class="question-number">Question ${currentQuestion + 1}/${quizData.length}</div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="options">${optionsHTML}</div>
+                    ${feedbackHTML}
+                </div>
+            `;
+            
+            // Add event listeners to options
+            const optionElements = quizContainer.querySelectorAll('.option');
+            optionElements.forEach(option => {
+                option.addEventListener('click', selectOption);
+            });
+            
+            // Update navigation buttons
+            prevBtn.disabled = currentQuestion === 0;
+            nextBtn.textContent = currentQuestion === quizData.length - 1 ? 'Finish Quiz' : 'Next';
+        }
+
+        // Select an option
+        function selectOption(e) {
+            if (userAnswers[currentQuestion] !== null) return; // Already answered
+            
+            const selectedOption = e.currentTarget;
+            const selectedIndex = parseInt(selectedOption.dataset.index);
+            
+            userAnswers[currentQuestion] = selectedIndex;
+            
+            // Check if answer is correct
+            if (selectedIndex === quizData[currentQuestion].answer) {
+                score++;
+                scoreEl.textContent = score;
+            } else {
+                // Add to incorrect questions list
+                incorrectQuestions.push({
+                    question: quizData[currentQuestion].question,
+                    userAnswer: selectedIndex,
+                    correctAnswer: quizData[currentQuestion].answer,
+                    options: quizData[currentQuestion].options,
+                    explanation: quizData[currentQuestion].explanation,
+                    questionNumber: currentQuestion + 1
+                });
+            }
+            
+            showQuestion();
+            updateProgressBar();
+        }
+
+        // Show next question
+        function showNextQuestion() {
+            if (currentQuestion < quizData.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Show previous question
+        function showPreviousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            const progress = ((currentQuestion + 1) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // Show results
+        function showResults() {
+            quizContainer.style.display = 'none';
+            document.querySelector('.navigation').style.display = 'none';
+            document.querySelector('.progress-container').style.display = 'none';
+            document.querySelector('.stats').style.display = 'none';
+            
+            finalScoreEl.textContent = score;
+            
+            // Performance message
+            const percentage = (score / quizData.length) * 100;
+            let message = '';
+            if (percentage >= 80) {
+                message = 'Excellent! You have a strong understanding of Introduction to Pathology.';
+            } else if (percentage >= 60) {
+                message = 'Good job! You have a solid grasp of the material.';
+            } else if (percentage >= 40) {
+                message = 'Not bad! Review the material and try again.';
+            } else {
+                message = 'Keep studying! Review the lectures and try again.';
+            }
+            
+            performanceMessageEl.textContent = message;
+            resultsContainer.style.display = 'block';
+            
+            // Show review button only if there are incorrect answers
+            if (incorrectQuestions.length > 0) {
+                reviewBtn.style.display = 'inline-block';
+            } else {
+                reviewBtn.style.display = 'none';
+            }
+        }
+
+        // Show incorrect questions
+        function showIncorrectQuestions() {
+            resultsContainer.style.display = 'none';
+            reviewSection.style.display = 'block';
+            
+            let incorrectHTML = '';
+            incorrectQuestions.forEach((item, index) => {
+                const correctLetter = String.fromCharCode(65 + item.correctAnswer);
+                const userLetter = String.fromCharCode(65 + item.userAnswer);
+                
+                incorrectHTML += `
+                    <div class="review-question">
+                        <div class="review-question-number">Question ${item.questionNumber}</div>
+                        <div class="review-question-text">${item.question}</div>
+                        <div>Your answer: ${userLetter}) ${item.options[item.userAnswer]}</div>
+                        <div class="review-answer review-correct">Correct answer: ${correctLetter}) ${item.options[item.correctAnswer]}</div>
+                        <div class="review-explanation">${item.explanation}</div>
+                    </div>
+                `;
+            });
+            
+            incorrectQuestionsList.innerHTML = incorrectHTML;
+        }
+
+        // Restart quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = new Array(quizData.length).fill(null);
+            incorrectQuestions = [];
+            
+            // Re-randomize the quiz data when restarting
+            quizData = createRandomizedQuizData();
+            
+            quizContainer.style.display = 'block';
+            document.querySelector('.navigation').style.display = 'flex';
+            document.querySelector('.progress-container').style.display = 'block';
+            document.querySelector('.stats').style.display = 'flex';
+            resultsContainer.style.display = 'none';
+            reviewSection.style.display = 'none';
+            
+            showQuestion();
+            updateProgressBar();
+        }
+
+        // Initialize the quiz when the page loads
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>

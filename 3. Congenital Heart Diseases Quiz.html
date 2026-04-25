@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Congenital Heart Diseases Practical MCQ</title>
+    <style>
+        body {
+            background-color: #0f172a; 
+            margin: 0;
+            padding: 0; 
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+            color: #ffffff;
+        }
+
+        /* --- Header Styles --- */
+        .header-section {
+            text-align: center;
+            padding: 40px 20px 20px 20px;
+            background-color: #1e293b; 
+            border-bottom: 1px solid #334155;
+        }
+
+        .header-section h1 {
+            margin: 0;
+            font-size: 1.8em;
+            color: #f8fafc;
+        }
+
+        .header-section .author {
+            font-style: italic;
+            color: #94a3b8;
+            margin: 10px 0 20px 0;
+            font-size: 1.1em;
+        }
+
+        .header-section .description {
+            color: #cbd5e1;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.5;
+            font-size: 1.05em;
+        }
+
+        /* --- Sticky Progress Bar Styles --- */
+        .sticky-progress-container {
+            position: sticky;
+            top: 0;
+            background-color: #0f172a;
+            padding: 15px 20px;
+            z-index: 100;
+            border-bottom: 1px solid #334155;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .progress-wrapper {
+            max-width: 1000px; 
+            margin: 0 auto;
+        }
+
+        .progress-track {
+            background-color: #1e293b;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border: 1px solid #334155;
+        }
+
+        .progress-fill {
+            background-color: #38bdf8; 
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            color: #f8fafc;
+            font-size: 1.05em;
+        }
+
+        /* --- Quiz Content & Responsive Layout Styles --- */
+        .quiz-wrapper {
+            max-width: 1000px; 
+            margin: 40px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px; 
+            padding: 0 20px;
+        }
+
+        .mcq-container {
+            background-color: #1e293b !important; 
+            color: #ffffff !important; 
+            padding: 30px;
+            box-sizing: border-box;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
+        }
+
+        /* Grid layout for landscape/desktop */
+        @media (min-width: 850px) {
+            .mcq-layout.has-image {
+                display: grid;
+                grid-template-columns: 1fr 1fr; /* 50/50 split */
+                gap: 30px;
+                align-items: start; 
+            }
+        }
+
+        /* Stacked layout for portrait/mobile */
+        @media (max-width: 849px) {
+            .mcq-layout.has-image {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            /* Order shift: Question -> Image -> Options */
+            .mcq-content { display: flex; flex-direction: column; }
+            .mcq-question { order: 1; }
+            .mcq-media { order: 2; margin-bottom: 20px; }
+            .mcq-options-container { order: 3; }
+        }
+
+        .mcq-media img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            background-color: #ffffff; /* Added white background in case images have transparency */
+        }
+
+        .mcq-question {
+            font-size: 1.25em;
+            font-weight: 700;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            color: #f8fafc !important; 
+        }
+
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .mcq-option {
+            padding: 16px;
+            background-color: #334155 !important; 
+            color: #f1f5f9 !important; 
+            border: 2px solid #475569 !important;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.05em;
+            font-weight: 500;
+        }
+
+        .mcq-option strong {
+            color: #38bdf8 !important; 
+            margin-right: 8px;
+        }
+
+        .mcq-option:hover {
+            background-color: #475569 !important;
+            border-color: #38bdf8 !important; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .mcq-option.disabled {
+            pointer-events: none;
+        }
+
+        .mcq-option.correct {
+            border-color: #22c55e !important;
+            background-color: #14532d !important; 
+            color: #ffffff !important;
+        }
+        .mcq-option.correct strong {
+            color: #4ade80 !important;
+        }
+
+        .mcq-option.incorrect {
+            border-color: #ef4444 !important;
+            background-color: #7f1d1d !important;
+            color: #ffffff !important;
+        }
+        .mcq-option.incorrect strong {
+            color: #f87171 !important;
+        }
+
+        .mcq-feedback {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 8px;
+            display: none;
+            line-height: 1.6;
+            font-size: 1em;
+            color: #ffffff !important;
+        }
+
+        .mcq-feedback.show {
+            display: block;
+            animation: mcqFadeIn 0.4s ease;
+        }
+
+        .mcq-feedback.correct {
+            border-left: 5px solid #22c55e !important;
+            background-color: #064e3b !important;
+        }
+
+        .mcq-feedback.incorrect {
+            border-left: 5px solid #ef4444 !important;
+            background-color: #450a0a !important;
+        }
+
+        @keyframes mcqFadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <h1>MCQs on Congenital Heart Diseases Quiz</h1>
+        <p class="author">Dr. Samy Salem</p>
+        <p class="description">Test your knowledge of Congenital Heart Diseases: differentiating cyanotic vs. acyanotic conditions, directional shunts, and identifying classic anatomical defects.</p>
+    </div>
+
+    <div class="sticky-progress-container">
+        <div class="progress-wrapper">
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+            <div class="stats-row">
+                <span id="question-count">Answered: 0/10</span>
+                <span id="score-count">Score: 0/0</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="quiz-app" class="quiz-wrapper"></div>
+
+    <script>
+        const questionsData = [
+            {
+                question: "Which of the following conditions is classified as an acyanotic heart disease featuring a left-to-right shunt?",
+                image: "", // Text-only
+                options: ["Tetralogy of Fallot", "Transposition of Great Vessels", "Patent Ductus Arteriosus", "Right Ventricular Hypertrophy"],
+                answer: 2, 
+                explanation: "Patent Ductus Arteriosus (PDA) is an acyanotic condition where oxygenated blood from the left side (aorta) shunts back to the right side (pulmonary artery)."
+            },
+            {
+                question: "Cyanotic heart diseases are primarily characterized by which specific type of blood shunting?",
+                image: "", // Text-only
+                options: ["Left to Right", "Right to Left", "Bidirectional", "No shunting"],
+                answer: 1, 
+                explanation: "Cyanotic heart diseases are characterized by a Right to Left shunt, where deoxygenated blood bypasses the lungs and enters systemic circulation."
+            },
+            {
+                question: "Identify the specific congenital defects indicated by the arrows in this gross heart specimen.",
+                image: "<img src='Screenshot_20260424-113000_WPS Office.jpg' alt='Gross heart specimen showing septal defects'>", 
+                options: ["ASD and VSD", "Coarctation of Aorta and PDA", "Pulmonary and Aortic Stenosis", "Tetralogy of Fallot"],
+                answer: 0, 
+                explanation: "The arrows point to an Atrial Septal Defect (ASD) in the upper chamber septum and a Ventricular Septal Defect (VSD) in the lower chamber septum."
+            },
+            {
+                question: "What abnormal vascular connection is demonstrated in the heart on the right side of this illustration?",
+                image: "<img src='20260424_113047_1_io_thread_1777019113704.jpg' alt='Illustration of a vascular connection between aorta and pulmonary artery'>", 
+                options: ["Coarctation of the aorta", "Patent ductus arteriosus", "Ventricular septal defect", "Transposition of great vessels"],
+                answer: 1, 
+                explanation: "This illustrates a Patent Ductus Arteriosus (PDA), where the ductus arteriosus fails to close, causing oxygenated blood from the aorta to mix into the pulmonary artery."
+            },
+            {
+                question: "This illustration demonstrates a structural anomaly leading to high blood pressure before the affected point and low blood pressure beyond it. What is the diagnosis?",
+                image: "<img src='20260424_113117_2_io_thread_1777019113731.jpg' alt='Illustration showing narrowing of a major vessel'>", 
+                options: ["Pulmonary Valve Stenosis", "Aortic Valve Stenosis", "Coarctation of the Aorta", "Patent Ductus Arteriosus"],
+                answer: 2, 
+                explanation: "Coarctation of the Aorta (COA) involves a narrowing of the aorta, which creates a pressure gradient—high pressure in the upper body and low pressure in the lower body."
+            },
+            {
+                question: "Based on this illustration, what is the condition?",
+                image: "<img src='20260424_113211_1777019531188.jpg' alt='Illustration showing restricted valve flow to the lungs'>", 
+                options: ["Aortic Valve Stenosis", "Pulmonary Valve Stenosis", "Atrial Septal Defect", "Tetralogy of Fallot"],
+                answer: 1, 
+                explanation: "This depicts Pulmonary Valve Stenosis, where the pulmonary valve fails to open fully, making it difficult for blood to flow from the right ventricle to the lungs."
+            },
+            {
+                question: "Examine the diseased structure on the right side of this diagram. Which condition is actively depicted?",
+                image: "<img src='20260424_113313_4_io_thread_1777019113772.jpg' alt='Illustration showing a diseased left-sided valve'>", 
+                options: ["Pulmonary Valve Stenosis", "Coarctation of the Aorta", "Aortic Valve Stenosis", "Ventricular Septal Defect"],
+                answer: 2, 
+                explanation: "This image highlights Aortic Valve Stenosis, showing a narrowed aortic valve that restricts blood flow leaving the left ventricle."
+            },
+            {
+                question: "What severe congenital anomaly is depicted in the heart on the right?",
+                image: "<img src='20260424_113434_1777019674091.jpg' alt='Illustration showing switched outflow vessels'>", 
+                options: ["Transposition of Great Vessels", "Tetralogy of Fallot", "Coarctation of the Aorta", "Patent Ductus Arteriosus"],
+                answer: 0, 
+                explanation: "This is Transposition of Great Vessels, a cyanotic disease where the aorta arises from the right ventricle and the pulmonary artery from the left ventricle."
+            },
+            {
+                question: "This diagram outlines four major associated defects. Which of the following is NOT one of the four defects of this specific syndrome?",
+                image: "<img src='20260424_113739_1777019858991.jpg' alt='Diagram of four major heart defects'>", 
+                options: ["Pulmonary Stenosis", "Right Ventricular Hypertrophy", "Atrial Septal Defect", "Overriding Aorta"],
+                answer: 2, 
+                explanation: "Tetralogy of Fallot consists of four defects: Pulmonary Stenosis, Right Ventricular Hypertrophy, Overriding Aorta, and a Ventricular Septal Defect (VSD), not an Atrial Septal Defect (ASD)."
+            },
+            {
+                question: "The physical finding shown in this image is most commonly associated with which of the following underlying physiological states?",
+                image: "<img src='20260424_113915_7_io_thread_1777019113848.png' alt='Image of swollen fingertips and nails'>", 
+                options: ["Acute left-to-right shunting", "Long-standing cyanosis", "Coarctation of the aorta", "Aortic valve stenosis"],
+                answer: 1, 
+                explanation: "The image shows clubbing of the fingertips, a clinical sign strongly associated with chronic hypoxia resulting from long-standing cyanotic (right-to-left shunt) heart diseases."
+            }
+        ];
+
+        let totalQuestions = questionsData.length;
+        let answeredQuestions = 0;
+        let currentScore = 0;
+
+        function shuffleOptions(qData) {
+            const correctAnswerText = qData.options[qData.answer];
+            for (let i = qData.options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [qData.options[i], qData.options[j]] = [qData.options[j], qData.options[i]];
+            }
+            qData.answer = qData.options.indexOf(correctAnswerText);
+        }
+
+        function updateProgress() {
+            const progressPercent = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+            document.getElementById('question-count').innerText = `Answered: ${answeredQuestions}/${totalQuestions}`;
+            document.getElementById('score-count').innerText = `Score: ${currentScore}/${answeredQuestions}`;
+        }
+
+        function renderQuiz() {
+            const appContainer = document.getElementById('quiz-app');
+            let htmlContent = '';
+
+            updateProgress(); 
+
+            questionsData.forEach((qData, qIndex) => {
+                shuffleOptions(qData);
+
+                const optionsHtml = qData.options.map((opt, oIndex) => `
+                    <div class="mcq-option" data-qindex="${qIndex}" data-oindex="${oIndex}">
+                        <strong>${String.fromCharCode(65 + oIndex)})</strong> ${opt}
+                    </div>
+                `).join('');
+
+                const layoutClass = qData.image ? 'mcq-layout has-image' : 'mcq-layout';
+                const imageHtml = qData.image ? `<div class="mcq-media">${qData.image}</div>` : '';
+
+                htmlContent += `
+                    <div class="mcq-container" id="mcq-container-${qIndex}">
+                        <div class="${layoutClass}">
+                            <div class="mcq-content">
+                                <div class="mcq-question">${qIndex + 1}. ${qData.question}</div>
+                                <div class="mcq-options-container" id="mcq-options-${qIndex}">
+                                    <div class="mcq-options">${optionsHtml}</div>
+                                    <div id="mcq-feedback-${qIndex}" class="mcq-feedback"></div>
+                                </div>
+                            </div>
+                            ${imageHtml}
+                        </div>
+                    </div>
+                `;
+            });
+
+            appContainer.innerHTML = htmlContent;
+
+            document.querySelectorAll('.mcq-option').forEach(opt => {
+                opt.addEventListener('click', handleSelection);
+            });
+        }
+
+        function handleSelection(event) {
+            const selectedElement = event.currentTarget;
+            const qIndex = parseInt(selectedElement.getAttribute('data-qindex'));
+            const oIndex = parseInt(selectedElement.getAttribute('data-oindex'));
+            const qData = questionsData[qIndex];
+            
+            const optionsContainer = document.getElementById(`mcq-options-${qIndex}`);
+            const allOptions = optionsContainer.querySelectorAll('.mcq-option');
+            const feedback = document.getElementById(`mcq-feedback-${qIndex}`);
+
+            if (!allOptions[0].classList.contains('disabled')) {
+                const isCorrect = oIndex === qData.answer;
+                
+                answeredQuestions++;
+                if (isCorrect) currentScore++;
+                
+                updateProgress();
+
+                allOptions.forEach(opt => opt.classList.add('disabled'));
+
+                if (isCorrect) {
+                    selectedElement.classList.add('correct');
+                    feedback.innerHTML = `<strong style="color: #4ade80;">✓ Correct!</strong><br><br><em>Explanation:</em> ${qData.explanation}`;
+                    feedback.className = 'mcq-feedback show correct';
+                } else {
+                    selectedElement.classList.add('incorrect');
+                    allOptions[qData.answer].classList.add('correct');
+                    
+                    const correctLetter = String.fromCharCode(65 + qData.answer);
+                    feedback.innerHTML = `<strong style="color: #f87171;">✗ Incorrect.</strong> The correct answer is <strong style="color: #ffffff;">${correctLetter}</strong>.<br><br><em>Explanation:</em> ${qData.explanation}`;
+                    feedback.className = 'mcq-feedback show incorrect';
+                }
+            }
+        }
+
+        renderQuiz();
+    </script>
+</body>
+</html>

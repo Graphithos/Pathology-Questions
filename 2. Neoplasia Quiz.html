@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neoplasia Practical MCQ Review</title>
+    <style>
+        body {
+            background-color: #0f172a; 
+            margin: 0;
+            padding: 0; 
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+            color: #ffffff;
+        }
+
+        /* --- Header Styles --- */
+        .header-section {
+            text-align: center;
+            padding: 40px 20px 20px 20px;
+            background-color: #1e293b; 
+            border-bottom: 1px solid #334155;
+        }
+
+        .header-section h1 {
+            margin: 0;
+            font-size: 1.8em;
+            color: #f8fafc;
+        }
+
+        .header-section .author {
+            font-style: italic;
+            color: #94a3b8;
+            margin: 10px 0 20px 0;
+            font-size: 1.1em;
+        }
+
+        .header-section .description {
+            color: #cbd5e1;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.5;
+            font-size: 1.05em;
+        }
+
+        /* --- Sticky Progress Bar Styles --- */
+        .sticky-progress-container {
+            position: sticky;
+            top: 0;
+            background-color: #0f172a;
+            padding: 15px 20px;
+            z-index: 100;
+            border-bottom: 1px solid #334155;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .progress-wrapper {
+            max-width: 1000px; /* Expanded slightly for landscape viewing */
+            margin: 0 auto;
+        }
+
+        .progress-track {
+            background-color: #1e293b;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border: 1px solid #334155;
+        }
+
+        .progress-fill {
+            background-color: #38bdf8; 
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            color: #f8fafc;
+            font-size: 1.05em;
+        }
+
+        /* --- Quiz Content & Responsive Layout Styles --- */
+        .quiz-wrapper {
+            max-width: 1000px; /* Wider max-width to accommodate side-by-side */
+            margin: 40px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px; 
+            padding: 0 20px;
+        }
+
+        .mcq-container {
+            background-color: #1e293b !important; 
+            color: #ffffff !important; 
+            padding: 30px;
+            box-sizing: border-box;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
+        }
+
+        /* Grid layout for landscape/desktop */
+        @media (min-width: 850px) {
+            .mcq-layout.has-image {
+                display: grid;
+                grid-template-columns: 1fr 1fr; /* 50/50 split */
+                gap: 30px;
+                align-items: start; /* Aligns content to the top */
+            }
+        }
+
+        /* Stacked layout for portrait/mobile */
+        @media (max-width: 849px) {
+            .mcq-layout.has-image {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            /* Order shift: Question -> Image -> Options */
+            .mcq-content { display: flex; flex-direction: column; }
+            .mcq-question { order: 1; }
+            .mcq-media { order: 2; margin-bottom: 20px; }
+            .mcq-options-container { order: 3; }
+        }
+
+        .mcq-media img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .mcq-question {
+            font-size: 1.25em;
+            font-weight: 700;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            color: #f8fafc !important; 
+        }
+
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .mcq-option {
+            padding: 16px;
+            background-color: #334155 !important; 
+            color: #f1f5f9 !important; 
+            border: 2px solid #475569 !important;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.05em;
+            font-weight: 500;
+        }
+
+        .mcq-option strong {
+            color: #38bdf8 !important; 
+            margin-right: 8px;
+        }
+
+        .mcq-option:hover {
+            background-color: #475569 !important;
+            border-color: #38bdf8 !important; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .mcq-option.disabled {
+            pointer-events: none;
+        }
+
+        .mcq-option.correct {
+            border-color: #22c55e !important;
+            background-color: #14532d !important; 
+            color: #ffffff !important;
+        }
+        .mcq-option.correct strong {
+            color: #4ade80 !important;
+        }
+
+        .mcq-option.incorrect {
+            border-color: #ef4444 !important;
+            background-color: #7f1d1d !important;
+            color: #ffffff !important;
+        }
+        .mcq-option.incorrect strong {
+            color: #f87171 !important;
+        }
+
+        .mcq-feedback {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 8px;
+            display: none;
+            line-height: 1.6;
+            font-size: 1em;
+            color: #ffffff !important;
+        }
+
+        .mcq-feedback.show {
+            display: block;
+            animation: mcqFadeIn 0.4s ease;
+        }
+
+        .mcq-feedback.correct {
+            border-left: 5px solid #22c55e !important;
+            background-color: #064e3b !important;
+        }
+
+        .mcq-feedback.incorrect {
+            border-left: 5px solid #ef4444 !important;
+            background-color: #450a0a !important;
+        }
+
+        @keyframes mcqFadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <h1>MCQs on Neoplasia Quiz</h1>
+        <p class="author">Dr. Samy Salem</p>
+        <p class="description">Test your knowledge of Neoplasia: distinguishing benign vs. malignant features, nomenclature rules, and identifying classic macroscopic and microscopic morphologies.</p>
+    </div>
+
+    <div class="sticky-progress-container">
+        <div class="progress-wrapper">
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+            <div class="stats-row">
+                <span id="question-count">Answered: 0/17</span>
+                <span id="score-count">Score: 0/0</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="quiz-app" class="quiz-wrapper"></div>
+
+    <script>
+        const questionsData = [
+            {
+                question: "Which of the following characteristics fundamentally distinguishes a true neoplasm from normal tissue repair and regeneration?",
+                image: "", // Text-only question
+                options: ["It involves cell proliferation", "It resolves once the stimulus is removed", "It is autonomous and purposeless", "It only involves mesenchymal cells"],
+                answer: 2, 
+                explanation: "A neoplasm is defined as a mass of tissue formed as a result of abnormal, excessive, uncoordinated, autonomous, and purposeless proliferation of cells, which continues even after the cessation of the stimulus for growth[cite: 51]."
+            },
+            {
+                question: "During a gross examination, a pathologist notes that a mass is firmly attached to deep, surrounding structures and possesses an irregular, non-capsulated surface. This appearance is highly characteristic of a:",
+                image: "", 
+                options: ["Benign tumor", "Malignant tumor", "Regenerative nodule", "Lipoma"],
+                answer: 1, 
+                explanation: "Malignant tumors typically present with an irregular surface, lack a capsule, and are attached to or invade deep structures, whereas benign tumors are usually regular, encapsulated, and not attached to deep tissues[cite: 56]."
+            },
+            {
+                question: "Based on standard nomenclature rules, what is the proper term for a benign tumor originating from mesenchymal smooth muscle cells?",
+                image: "", 
+                options: ["Leiomyosarcoma", "Squamous cell carcinoma", "Leiomyoma", "Adenoma"],
+                answer: 2, 
+                explanation: "Benign tumors are named by combining the cell or tissue of origin with the suffix '-oma'[cite: 62]. Therefore, a benign tumor of smooth muscle is called a Leiomyoma[cite: 64]."
+            },
+            {
+                question: "According to nomenclature guidelines, malignant tumors arising specifically from epithelial cells are classified as:",
+                image: "", 
+                options: ["Sarcomas", "Carcinomas", "Adenomas", "Lipomas"],
+                answer: 1, 
+                explanation: "Malignant tumors that originate from epithelial tissue are given the suffix '-carcinoma' (e.g., adenocarcinoma)[cite: 66]."
+            },
+            {
+                question: "Examine the histological image provided. This benign tumor is characterized by the formation of finger-like projections lined by surface epithelium. What is the correct diagnosis?",
+                image: "<img src='Screenshot_20260425-165905_Docs.jpg' alt='Papilloma histology'>", 
+                options: ["Adenoma", "Papilloma", "Lipoma", "Squamous cell carcinoma"],
+                answer: 1, 
+                explanation: "A papilloma is a benign tumor of surface epithelium that distinctively forms papillary, finger-like projections[cite: 63]."
+            },
+            {
+                question: "Identify the neoplasm in this micrograph, which features well-formed glandular structures indicating a benign origin from glandular epithelium.",
+                image: "<img src='Screenshot_20260221-171129_WPS Office.jpg' alt='Adenoma histology'>", 
+                options: ["Papilloma", "Squamous cell carcinoma", "Adenoma", "Leiomyosarcoma"],
+                answer: 2, 
+                explanation: "An adenoma is a benign tumor derived from glandular epithelium that forms recognizable glandular structures[cite: 63]."
+            },
+            {
+                question: "This image shows a proliferation of mature-looking cells featuring large, clear vacuoles. This represents a benign tumor known as a:",
+                image: "<img src='20260226_202644_4_io_thread_1772127982867.jpg' alt='Lipoma histology'>", 
+                options: ["Liposarcoma", "Adenoma", "Lipoma", "Leiomyoma"],
+                answer: 2, 
+                explanation: "A lipoma is classified as a benign tumor consisting of fat cells[cite: 63]."
+            },
+            {
+                question: "This micrograph displays interlacing bundles of cells with elongated nuclei. This is a benign tumor of smooth muscle cells called a:",
+                image: "<img src='Screenshot_20260226-203442_WPS Office.jpg' alt='Leiomyoma histology'>", 
+                options: ["Leiomyosarcoma", "Osteoma", "Leiomyoma", "Lipoma"],
+                answer: 2, 
+                explanation: "A leiomyoma is the definitive term for a benign tumor composed of smooth muscle cells[cite: 64]."
+            },
+            {
+                question: "Observe the prominent, rounded bony mass on the skull in this gross specimen. This represents a benign tumor of bone known as an:",
+                image: "<img src='Screenshot_20260226-203627_WPS Office.jpg' alt='Osteoma gross specimen'>", 
+                options: ["Osteosarcoma", "Osteoma", "Papilloma", "Adenocarcinoma"],
+                answer: 1, 
+                explanation: "An osteoma is a benign tumor of bone originating from osteoblasts[cite: 64]."
+            },
+            {
+                question: "This histological section shows a malignant epithelial tumor. The presence of the circular, pink structures known as 'keratin pearls' confirms the diagnosis of:",
+                image: "<img src='Screenshot_20260425-170741_Docs.jpg' alt='Squamous cell carcinoma histology'>", 
+                options: ["Adenocarcinoma", "Leiomyosarcoma", "Squamous cell carcinoma", "Papilloma"],
+                answer: 2, 
+                explanation: "Squamous cell carcinoma is a malignant tumor of squamous epithelium that is histologically characterized by the formation of keratin pearls[cite: 68]."
+            },
+            {
+                question: "The invasive glandular structures seen in this section indicate a malignant tumor of glandular epithelium. This is correctly termed an:",
+                image: "<img src='Screenshot_20260221-171245_WPS Office.jpg' alt='Adenocarcinoma histology'>", 
+                options: ["Adenoma", "Adenocarcinoma", "Squamous cell carcinoma", "Osteosarcoma"],
+                answer: 1, 
+                explanation: "An adenocarcinoma is a malignant tumor originating from glandular epithelium[cite: 68]."
+            },
+            {
+                question: "In this micrograph of a malignant bone tumor, the arrow points to a cell rimming the pink, acellular matrix (asterisk). What specific tumor and feature are indicated?",
+                image: "<img src='Screenshot_20260226-212515_Gallery.jpg' alt='Osteosarcoma histology'>", 
+                options: ["Osteoma forming benign bone", "Osteosarcoma forming malignant osteoid rimmed by malignant osteoblasts", "Liposarcoma forming fat vacuoles", "Leiomyosarcoma forming smooth muscle fibers"],
+                answer: 1, 
+                explanation: "This is an osteosarcoma, a malignant tumor of bone. The classic histological feature is the formation of malignant osteoid (marked by the asterisk) that is rimmed by malignant osteoblasts (indicated by the arrow)[cite: 69]."
+            },
+            {
+                question: "Observe the extreme variation in the size and shape of the cells in this micrograph. This microscopic feature, highly indicative of malignancy, is termed:",
+                image: "<img src='Screenshot_20260226-204543_WPS Office.jpg' alt='Cellular pleomorphism'>", 
+                options: ["Monomorphism", "Differentiation", "Pleomorphism", "Encapsulation"],
+                answer: 2, 
+                explanation: "Malignant cells frequently exhibit pleomorphism, which is defined as a significant variation in the size and shape of the cells, unlike benign cells which are typically uniform (monomorphic)[cite: 71]."
+            },
+            {
+                question: "Comparing normal tissue to neoplastic tissue, malignant cells typically lose their normal cell features and normal adhesion. This defining characteristic is known as:",
+                image: "", 
+                options: ["Metastasis", "Pleomorphism", "Anaplasia", "Monomorphism"],
+                answer: 2, 
+                explanation: "Anaplasia refers specifically to the loss of normal cell features and normal cellular adhesion, which is a hallmark microscopic difference seen in malignant cells[cite: 71]."
+            },
+            {
+                question: "When evaluating a cell for potential malignancy under a microscope, which change regarding the nucleus-to-cytoplasm (N/C) ratio is generally observed?",
+                image: "", 
+                options: ["The N/C ratio remains low", "The N/C ratio becomes high", "The nucleus completely disappears", "The cytoplasm expands massively"],
+                answer: 1, 
+                explanation: "Malignant cells characteristically demonstrate a high nucleus-to-cytoplasm ratio, often due to enlarged, pleomorphic nuclei, whereas benign cells maintain a low ratio[cite: 71]."
+            },
+            {
+                question: "This image highlights the transition from normal epithelium to neoplastic epithelium. The neoplastic side demonstrates an increased number of cells and a distinct loss of the normal, organized cellular arrangement. This loss of organization is termed:",
+                image: "<img src='Screenshot_20260425-171308_Docs.jpg' alt='Loss of polarity in epithelium'>", 
+                options: ["Loss of polarity", "Monomorphism", "Encapsulation", "Differentiation"],
+                answer: 0, 
+                explanation: "Neoplastic tissue is characterized by an increased cell number and a loss of polarity, which presents microscopically as a disorganized arrangement of cells, completely contrary to the preserved, organized arrangement seen in benign or normal tissues[cite: 71, 72]."
+            },
+            {
+                question: "Which of the following biological behaviors represents a definitive, absolutely distinguishing feature of malignant tumors compared to benign tumors?",
+                image: "", 
+                options: ["Rapid growth rate", "Absence of a capsule", "Ability to metastasize", "Pressure effect on neighboring organs"],
+                answer: 2, 
+                explanation: "While growth rate and encapsulation are strong indicators, the definitive feature is metastasis. Benign tumors never metastasize, whereas malignant tumors have the capability to metastasize to distant sites[cite: 56]."
+            }
+        ];
+
+        let totalQuestions = questionsData.length;
+        let answeredQuestions = 0;
+        let currentScore = 0;
+
+        function shuffleOptions(qData) {
+            const correctAnswerText = qData.options[qData.answer];
+            for (let i = qData.options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [qData.options[i], qData.options[j]] = [qData.options[j], qData.options[i]];
+            }
+            qData.answer = qData.options.indexOf(correctAnswerText);
+        }
+
+        function updateProgress() {
+            const progressPercent = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+            document.getElementById('question-count').innerText = `Answered: ${answeredQuestions}/${totalQuestions}`;
+            document.getElementById('score-count').innerText = `Score: ${currentScore}/${answeredQuestions}`;
+        }
+
+        function renderQuiz() {
+            const appContainer = document.getElementById('quiz-app');
+            let htmlContent = '';
+
+            updateProgress(); 
+
+            questionsData.forEach((qData, qIndex) => {
+                shuffleOptions(qData);
+
+                const optionsHtml = qData.options.map((opt, oIndex) => `
+                    <div class="mcq-option" data-qindex="${qIndex}" data-oindex="${oIndex}">
+                        <strong>${String.fromCharCode(65 + oIndex)})</strong> ${opt}
+                    </div>
+                `).join('');
+
+                // Check if image exists to apply correct grid class
+                const layoutClass = qData.image ? 'mcq-layout has-image' : 'mcq-layout';
+                const imageHtml = qData.image ? `<div class="mcq-media">${qData.image}</div>` : '';
+
+                htmlContent += `
+                    <div class="mcq-container" id="mcq-container-${qIndex}">
+                        <div class="${layoutClass}">
+                            <div class="mcq-content">
+                                <div class="mcq-question">${qIndex + 1}. ${qData.question}</div>
+                                <div class="mcq-options-container" id="mcq-options-${qIndex}">
+                                    <div class="mcq-options">${optionsHtml}</div>
+                                    <div id="mcq-feedback-${qIndex}" class="mcq-feedback"></div>
+                                </div>
+                            </div>
+                            ${imageHtml}
+                        </div>
+                    </div>
+                `;
+            });
+
+            appContainer.innerHTML = htmlContent;
+
+            document.querySelectorAll('.mcq-option').forEach(opt => {
+                opt.addEventListener('click', handleSelection);
+            });
+        }
+
+        function handleSelection(event) {
+            const selectedElement = event.currentTarget;
+            const qIndex = parseInt(selectedElement.getAttribute('data-qindex'));
+            const oIndex = parseInt(selectedElement.getAttribute('data-oindex'));
+            const qData = questionsData[qIndex];
+            
+            const optionsContainer = document.getElementById(`mcq-options-${qIndex}`);
+            const allOptions = optionsContainer.querySelectorAll('.mcq-option');
+            const feedback = document.getElementById(`mcq-feedback-${qIndex}`);
+
+            if (!allOptions[0].classList.contains('disabled')) {
+                const isCorrect = oIndex === qData.answer;
+                
+                answeredQuestions++;
+                if (isCorrect) currentScore++;
+                
+                updateProgress();
+
+                allOptions.forEach(opt => opt.classList.add('disabled'));
+
+                if (isCorrect) {
+                    selectedElement.classList.add('correct');
+                    feedback.innerHTML = `<strong style="color: #4ade80;">✓ Correct!</strong><br><br><em>Explanation:</em> ${qData.explanation}`;
+                    feedback.className = 'mcq-feedback show correct';
+                } else {
+                    selectedElement.classList.add('incorrect');
+                    allOptions[qData.answer].classList.add('correct');
+                    
+                    const correctLetter = String.fromCharCode(65 + qData.answer);
+                    feedback.innerHTML = `<strong style="color: #f87171;">✗ Incorrect.</strong> The correct answer is <strong style="color: #ffffff;">${correctLetter}</strong>.<br><br><em>Explanation:</em> ${qData.explanation}`;
+                    feedback.className = 'mcq-feedback show incorrect';
+                }
+            }
+        }
+
+        renderQuiz();
+    </script>
+</body>
+</html>

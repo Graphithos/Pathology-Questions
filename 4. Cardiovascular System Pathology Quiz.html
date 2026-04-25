@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardiovascular System Pathology MCQ Review</title>
+    <style>
+        body {
+            background-color: #0f172a; 
+            margin: 0;
+            padding: 0; 
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+            color: #ffffff;
+        }
+
+        /* --- Header Styles --- */
+        .header-section {
+            text-align: center;
+            padding: 40px 20px 20px 20px;
+            background-color: #1e293b; 
+            border-bottom: 1px solid #334155;
+        }
+
+        .header-section h1 {
+            margin: 0;
+            font-size: 1.8em;
+            color: #f8fafc;
+        }
+
+        .header-section .author {
+            font-style: italic;
+            color: #94a3b8;
+            margin: 10px 0 20px 0;
+            font-size: 1.1em;
+        }
+
+        .header-section .description {
+            color: #cbd5e1;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.5;
+            font-size: 1.05em;
+        }
+
+        /* --- Sticky Progress Bar Styles --- */
+        .sticky-progress-container {
+            position: sticky;
+            top: 0;
+            background-color: #0f172a;
+            padding: 15px 20px;
+            z-index: 100;
+            border-bottom: 1px solid #334155;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .progress-wrapper {
+            max-width: 1000px; 
+            margin: 0 auto;
+        }
+
+        .progress-track {
+            background-color: #1e293b;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border: 1px solid #334155;
+        }
+
+        .progress-fill {
+            background-color: #38bdf8; 
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+            color: #f8fafc;
+            font-size: 1.05em;
+        }
+
+        /* --- Quiz Content & Responsive Layout Styles --- */
+        .quiz-wrapper {
+            max-width: 1000px; 
+            margin: 40px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px; 
+            padding: 0 20px;
+        }
+
+        .mcq-container {
+            background-color: #1e293b !important; 
+            color: #ffffff !important; 
+            padding: 30px;
+            box-sizing: border-box;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            border: 1px solid #334155;
+        }
+
+        /* Grid layout for landscape/desktop */
+        @media (min-width: 850px) {
+            .mcq-layout.has-image {
+                display: grid;
+                grid-template-columns: 1fr 1fr; /* 50/50 split */
+                grid-template-rows: auto 1fr;
+                gap: 20px 30px;
+            }
+            .mcq-question {
+                grid-column: 1 / 2;
+                grid-row: 1;
+                margin-bottom: 0 !important; /* Let the grid handle spacing */
+            }
+            .mcq-options-container {
+                grid-column: 1 / 2;
+                grid-row: 2;
+            }
+            .mcq-media {
+                grid-column: 2 / 3;
+                grid-row: 1 / span 2;
+                align-self: start;
+            }
+        }
+
+        /* Stacked layout for portrait/mobile */
+        @media (max-width: 849px) {
+            .mcq-layout.has-image {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            /* Natural DOM order is now Question -> Media -> Options */
+            .mcq-question { margin-bottom: 0 !important; }
+        }
+
+        .mcq-media img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            background-color: #ffffff; 
+        }
+
+        .mcq-question {
+            font-size: 1.25em;
+            font-weight: 700;
+            line-height: 1.5;
+            color: #f8fafc !important; 
+            margin-bottom: 25px; /* Applies only to non-image questions or via media queries */
+        }
+
+        .mcq-options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .mcq-option {
+            padding: 16px;
+            background-color: #334155 !important; 
+            color: #f1f5f9 !important; 
+            border: 2px solid #475569 !important;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.05em;
+            font-weight: 500;
+        }
+
+        .mcq-option strong {
+            color: #38bdf8 !important; 
+            margin-right: 8px;
+        }
+
+        .mcq-option:hover {
+            background-color: #475569 !important;
+            border-color: #38bdf8 !important; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .mcq-option.disabled {
+            pointer-events: none;
+        }
+
+        .mcq-option.correct {
+            border-color: #22c55e !important;
+            background-color: #14532d !important; 
+            color: #ffffff !important;
+        }
+        .mcq-option.correct strong {
+            color: #4ade80 !important;
+        }
+
+        .mcq-option.incorrect {
+            border-color: #ef4444 !important;
+            background-color: #7f1d1d !important;
+            color: #ffffff !important;
+        }
+        .mcq-option.incorrect strong {
+            color: #f87171 !important;
+        }
+
+        .mcq-feedback {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 8px;
+            display: none;
+            line-height: 1.6;
+            font-size: 1em;
+            color: #ffffff !important;
+        }
+
+        .mcq-feedback.show {
+            display: block;
+            animation: mcqFadeIn 0.4s ease;
+        }
+
+        .mcq-feedback.correct {
+            border-left: 5px solid #22c55e !important;
+            background-color: #064e3b !important;
+        }
+
+        .mcq-feedback.incorrect {
+            border-left: 5px solid #ef4444 !important;
+            background-color: #450a0a !important;
+        }
+
+        @keyframes mcqFadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <h1>MCQs on Cardiovascular System Pathology Quiz</h1>
+        <p class="author">Dr. Samy Salem</p>
+        <p class="description">Test your knowledge of Cardiovascular Pathology: atherosclerosis, arteriolosclerosis, and the cardiac/cerebral manifestations of hypertension.</p>
+    </div>
+
+    <div class="sticky-progress-container">
+        <div class="progress-wrapper">
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+            <div class="stats-row">
+                <span id="question-count">Answered: 0/12</span>
+                <span id="score-count">Score: 0/0</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="quiz-app" class="quiz-wrapper"></div>
+
+    <script>
+        const questionsData = [
+            {
+                question: "What distinguishes an early fatty streak from an advanced atherosclerotic plaque microscopically?",
+                image: "", 
+                options: [
+                    "Presence of a white fibrous cap.", 
+                    "Presence of subendothelial foam cells without a necrotic core.", 
+                    "Protrusion of the media into the lumen.", 
+                    "Accumulation of calcium in the adventitia."
+                ],
+                answer: 1, 
+                explanation: "Early lesions (fatty streaks) consist of a subendothelial accumulation of foam cells without a necrotic core or fibrous cap[cite: 174]. Advanced plaques possess a necrotic core and a white fibrous cap."
+            },
+            {
+                question: "Identify the layer of the blood vessel wall indicated by the inner-most region shown in this diagram.",
+                image: "<img src='20260424_122032_1777022432183.jpg' alt='Diagram of normal blood vessel wall layers'>", 
+                options: ["Intima", "Media", "Adventitia", "External elastic layer"],
+                answer: 0, 
+                explanation: "The normal blood vessel wall consists of the intima (innermost, containing endothelium and internal elastic layer), media (middle, containing smooth muscle), and adventitia (outermost)."
+            },
+            {
+                question: "Examine these four gross specimens of the aorta. Which panel corresponds to an advanced atherosclerotic plaque with ulceration?",
+                image: "<img src='20260424_122229_2_io_thread_1777021100226.png' alt='Four gross specimens of the aorta labeled A, B, C, D'>", 
+                options: ["Panel A", "Panel B", "Panel C", "Panel D"],
+                answer: 3, 
+                explanation: "Panel D shows plaques with ulceration, representing severe, complicated atherosclerosis. Panel B shows flat fatty streaks, and C shows raised plaques without obvious deep ulceration."
+            },
+            {
+                question: "In this diagram of an atheromatous plaque, what comprises the specific region labeled 'Necrotic Center'?",
+                image: "<img src='20260424_122320_1777022600678.jpg' alt='Diagram of atheromatous plaque components'>", 
+                options: [
+                    "Smooth muscle cells and elastin", 
+                    "Intact internal elastic lamina", 
+                    "Cell debris, cholesterol crystals, foam cells, and calcium", 
+                    "Red blood cells and platelets"
+                ],
+                answer: 2, 
+                explanation: "The necrotic center of an atheromatous plaque contains cell debris, cholesterol crystals, foam cells, and calcium."
+            },
+            {
+                question: "What is the primary pathological change occurring in the lumen of the medium-sized artery shown in this histological section?",
+                image: "<img src='20260424_122731_5_io_thread_1777021100502.png' alt='Histology of an atherosclerotic plaque narrowing a lumen'>", 
+                options: [
+                    "Outward aneurysmal dilation", 
+                    "Asymmetric luminal narrowing due to an intimal plaque", 
+                    "Medial hypertrophy", 
+                    "Acute vasculitis"
+                ],
+                answer: 1, 
+                explanation: "Atherosclerosis is characterized by intimal lesions (atheromas) that protrude into and narrow the vessel lumen, as seen in this cross-section."
+            },
+            {
+                question: "The arrow in this microscopic cross-section points to a critical complication. What is this event?",
+                image: "<img src='20260424_122822_1777022902812.jpg' alt='Histology showing a ruptured plaque'>", 
+                options: [
+                    "Fatty streak formation", 
+                    "Medial calcification", 
+                    "Atherosclerotic plaque rupture", 
+                    "Aneurysm formation"
+                ],
+                answer: 2, 
+                explanation: "The image depicts an atherosclerotic plaque rupture, where the fibrous cap breaks, exposing the thrombogenic necrotic core to the bloodstream."
+            },
+            {
+                question: "Following the event shown in the previous question, what subsequent complication is demonstrated by the arrow in this image?",
+                image: "<img src='20260424_122936_1777022976490.jpg' alt='Histology showing a thrombus attached to a plaque'>", 
+                options: [
+                    "Thrombosis superimposed on an atherosclerotic plaque", 
+                    "Hyaline arteriolosclerosis", 
+                    "Fibrous cap thickening", 
+                    "Hemorrhage into the media"
+                ],
+                answer: 0, 
+                explanation: "Plaque rupture frequently leads to thrombosis superimposed on the atherosclerotic plaque, which can acutely occlude the vessel lumen."
+            },
+            {
+                question: "What is the specific histological finding indicated by the small arrow in this renal biopsy?",
+                image: "<img src='20260424_123416_1777023256318.jpg' alt='Histology showing hyaline arteriolosclerosis'>", 
+                options: [
+                    "Onion skin appearance", 
+                    "Glassy thickening of the arteriolar wall", 
+                    "Sclerotic glomerulus", 
+                    "Necrotic core"
+                ],
+                answer: 1, 
+                explanation: "Hyaline arteriolosclerosis is characterized by the glassy thickening of arteriolar walls (arrow), which can lead to renal ischemia and benign nephrosclerosis."
+            },
+            {
+                question: "This high-power microscopic image shows small blood vessels with a distinct morphological change. What is the classic term for this appearance?",
+                image: "<img src='20260424_123632_8_io_thread_1777021100794.jpg' alt='Histology showing hyperplastic arteriolosclerosis'>", 
+                options: [
+                    "Glassy thickening", 
+                    "Fatty streak", 
+                    "Onion skin appearance", 
+                    "Atheromatous core"
+                ],
+                answer: 2, 
+                explanation: "Hyperplastic arteriolosclerosis is characterized by an 'onion skin' appearance secondary to the hyperplasia of smooth muscles in the vessel wall."
+            },
+            {
+                question: "This gross cross-section of a heart is from a patient with a history of poorly treated hypertension. What is the primary adaptive change shown?",
+                image: "<img src='20260424_123838_9_io_thread_1777021100898.png' alt='Gross pathology of left ventricular hypertrophy'>", 
+                options: [
+                    "Right ventricular dilation", 
+                    "Left ventricular hypertrophy", 
+                    "Atrial septal defect", 
+                    "Myocardial infarction"
+                ],
+                answer: 1, 
+                explanation: "Left ventricular (LV) hypertrophy is an adaptive response to pressure overload in longstanding, poorly treated hypertension, resulting in increased LV wall thickness and heart weight."
+            },
+            {
+                question: "This brain specimen reveals a devastating consequence of hypertension. What is the specific location and nature of this lesion?",
+                image: "<img src='20260424_124415_1777023855758.jpg' alt='Gross pathology of an intracerebral hemorrhage'>", 
+                options: [
+                    "Small cystic space in the basis pontis", 
+                    "Large basal ganglia hemorrhage", 
+                    "Subdural hematoma", 
+                    "Meningitis"
+                ],
+                answer: 1, 
+                explanation: "This is a large basal ganglia hemorrhage. Hypertension causes blood vessel sclerosis and increased vulnerability to rupture, leading to this type of stroke."
+            },
+            {
+                question: "Examine the basis pontis in this brain cross-section. What is the term for the small cystic space shown?",
+                image: "<img src='20260424_124619_1777023979576.jpg' alt='Gross pathology showing a lacunar infarct'>", 
+                options: [
+                    "Lacunar infarct", 
+                    "Basal ganglia hemorrhage", 
+                    "Atheromatous plaque", 
+                    "Microaneurysm"
+                ],
+                answer: 0, 
+                explanation: "A lacunar infarct appears as a small cystic space in the basis pontis. One or two of these lesions typically will not significantly reduce function."
+            }
+        ];
+
+        let totalQuestions = questionsData.length;
+        let answeredQuestions = 0;
+        let currentScore = 0;
+
+        function shuffleOptions(qData) {
+            const correctAnswerText = qData.options[qData.answer];
+            for (let i = qData.options.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [qData.options[i], qData.options[j]] = [qData.options[j], qData.options[i]];
+            }
+            qData.answer = qData.options.indexOf(correctAnswerText);
+        }
+
+        function updateProgress() {
+            const progressPercent = (answeredQuestions / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+            document.getElementById('question-count').innerText = `Answered: ${answeredQuestions}/${totalQuestions}`;
+            document.getElementById('score-count').innerText = `Score: ${currentScore}/${answeredQuestions}`;
+        }
+
+        function renderQuiz() {
+            const appContainer = document.getElementById('quiz-app');
+            let htmlContent = '';
+
+            updateProgress(); 
+
+            questionsData.forEach((qData, qIndex) => {
+                shuffleOptions(qData);
+
+                const optionsHtml = qData.options.map((opt, oIndex) => `
+                    <div class="mcq-option" data-qindex="${qIndex}" data-oindex="${oIndex}">
+                        <strong>${String.fromCharCode(65 + oIndex)})</strong> ${opt}
+                    </div>
+                `).join('');
+
+                const layoutClass = qData.image ? 'mcq-layout has-image' : 'mcq-layout';
+                const imageHtml = qData.image ? `<div class="mcq-media">${qData.image}</div>` : '';
+
+                // Note the flattened structure here to allow natural DOM flow in portrait 
+                // and CSS Grid placement in landscape mode.
+                htmlContent += `
+                    <div class="mcq-container" id="mcq-container-${qIndex}">
+                        <div class="${layoutClass}">
+                            <div class="mcq-question">${qIndex + 1}. ${qData.question}</div>
+                            ${imageHtml}
+                            <div class="mcq-options-container" id="mcq-options-${qIndex}">
+                                <div class="mcq-options">${optionsHtml}</div>
+                                <div id="mcq-feedback-${qIndex}" class="mcq-feedback"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            appContainer.innerHTML = htmlContent;
+
+            document.querySelectorAll('.mcq-option').forEach(opt => {
+                opt.addEventListener('click', handleSelection);
+            });
+        }
+
+        function handleSelection(event) {
+            const selectedElement = event.currentTarget;
+            const qIndex = parseInt(selectedElement.getAttribute('data-qindex'));
+            const oIndex = parseInt(selectedElement.getAttribute('data-oindex'));
+            const qData = questionsData[qIndex];
+            
+            const optionsContainer = document.getElementById(`mcq-options-${qIndex}`);
+            const allOptions = optionsContainer.querySelectorAll('.mcq-option');
+            const feedback = document.getElementById(`mcq-feedback-${qIndex}`);
+
+            if (!allOptions[0].classList.contains('disabled')) {
+                const isCorrect = oIndex === qData.answer;
+                
+                answeredQuestions++;
+                if (isCorrect) currentScore++;
+                
+                updateProgress();
+
+                allOptions.forEach(opt => opt.classList.add('disabled'));
+
+                if (isCorrect) {
+                    selectedElement.classList.add('correct');
+                    feedback.innerHTML = `<strong style="color: #4ade80;">✓ Correct!</strong><br><br><em>Explanation:</em> ${qData.explanation}`;
+                    feedback.className = 'mcq-feedback show correct';
+                } else {
+                    selectedElement.classList.add('incorrect');
+                    allOptions[qData.answer].classList.add('correct');
+                    
+                    const correctLetter = String.fromCharCode(65 + qData.answer);
+                    feedback.innerHTML = `<strong style="color: #f87171;">✗ Incorrect.</strong> The correct answer is <strong style="color: #ffffff;">${correctLetter}</strong>.<br><br><em>Explanation:</em> ${qData.explanation}`;
+                    feedback.className = 'mcq-feedback show incorrect';
+                }
+            }
+        }
+
+        renderQuiz();
+    </script>
+</body>
+</html>
